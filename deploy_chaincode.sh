@@ -39,6 +39,7 @@ peer lifecycle chaincode package "$PACKAGE_FILE" \
   --lang golang \
   --label "$LABEL"
 
+cd ../test-network/
 # Set environment for Org1 as admin
 echo "🔧 Operating as Org1..."
 export CORE_PEER_LOCALMSPID="Org1MSP"
