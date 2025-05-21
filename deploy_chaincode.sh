@@ -13,7 +13,7 @@ read -p "Chaincode folder name (inside current directory): " FOLDER_NAME
 CHANNEL_NAME="mychannel"
 LABEL="${CC_NAME}_${CC_VERSION}"
 PACKAGE_FILE="${CC_NAME}.tar.gz"
-CC_SRC_PATH="./${FOLDER_NAME}"
+CC_SRC_PATH="$(realpath "./${FOLDER_NAME}")"
 
 echo "📁 Using chaincode path: $CC_SRC_PATH"
 echo "📡 Channel: $CHANNEL_NAME"
@@ -28,11 +28,12 @@ if [ ! -d "vendor" ]; then
 fi
 popd > /dev/null
 
+
+cd ../test-network/
 # Ensure peer binary and config are available
 export PATH=${PWD}/../bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/../config
 
-cd ../test-network/
 # package the chaincode
 echo "⏳ Packaging chaincode..."
 peer lifecycle chaincode package "$PACKAGE_FILE" \
