@@ -32,6 +32,7 @@ popd > /dev/null
 export PATH=${PWD}/../bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/../config
 
+cd ../test-network/
 # package the chaincode
 echo "⏳ Packaging chaincode..."
 peer lifecycle chaincode package "$PACKAGE_FILE" \
@@ -39,7 +40,6 @@ peer lifecycle chaincode package "$PACKAGE_FILE" \
   --lang golang \
   --label "$LABEL"
 
-cd ../test-network/
 # Set environment for Org1 as admin
 echo "🔧 Operating as Org1..."
 export CORE_PEER_LOCALMSPID="Org1MSP"
