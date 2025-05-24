@@ -26,7 +26,7 @@ type Asset struct {
 
 // InitLedger adds a base set of assets to the ledger
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
-	currentTime := time.Now().Unix()
+	currentTime := time.Now().UnixNano()
 	assets := []Asset{
 		{ID: "asset1", Color: "blue", Size: 5, Owner: "Tomoko", AppraisedValue: 300, CreateTime: currentTime},
 		{ID: "asset2", Color: "red", Size: 5, Owner: "Brad", AppraisedValue: 400, CreateTime: currentTime},
@@ -67,7 +67,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		Size:           size,
 		Owner:          owner,
 		AppraisedValue: appraisedValue,
-		CreateTime:      time.Now().Unix(), // added for timestamp
+		CreateTime:      time.Now().UnixNano(), // added for timestamp
 	}
 	assetJSON, err := json.Marshal(asset)
 	if err != nil {
@@ -113,7 +113,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		Size:           size,
 		Owner:          owner,
 		AppraisedValue: appraisedValue,
-		CreateTime:      time.Now().Unix(), // added for timestamp
+		CreateTime:      time.Now().UnixNano(), // added for timestamp
 	}
 	assetJSON, err := json.Marshal(asset)
 	if err != nil {
