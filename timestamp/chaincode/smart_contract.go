@@ -21,7 +21,7 @@ type Asset struct {
 	ID             string `json:"ID"`
 	Owner          string `json:"Owner"`
 	Size           int    `json:"Size"`
-	CreateTime      string `json:"CreateTime"` // added for timestamp
+	CreateTime      int64 `json:"CreateTime"` // added for timestamp
 }
 
 // InitLedger adds a base set of assets to the ledger
