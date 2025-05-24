@@ -26,6 +26,7 @@ type Asset struct {
 
 // InitLedger adds a base set of assets to the ledger
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
+	currentTime := time.Now().Format(time.RFC3339)
 	assets := []Asset{
 		{ID: "asset1", Color: "blue", Size: 5, Owner: "Tomoko", AppraisedValue: 300, CreateTime: currentTime},
 		{ID: "asset2", Color: "red", Size: 5, Owner: "Brad", AppraisedValue: 400, CreateTime: currentTime},
