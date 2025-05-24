@@ -36,6 +36,9 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		{ID: "asset6", Color: "white", Size: 15, Owner: "Michel", AppraisedValue: 800, CreateTime: currentTime},
 	}
 
+	// output thw createTime for assets
+	fmt.Println("Creating assets with timestamp:", currentTime)
+
 	for _, asset := range assets {
 		assetJSON, err := json.Marshal(asset)
 		if err != nil {
