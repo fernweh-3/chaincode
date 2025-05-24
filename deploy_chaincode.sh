@@ -62,7 +62,6 @@ echo "📦 Package ID: $PACKAGE_ID"
 # Step 5: Get current sequence (try from Org1)
 echo "🔍 Getting current sequence..."
 SEQUENCE=$(peer lifecycle chaincode querycommitted -C "$CHANNEL_NAME" -n "$CC_NAME" 2>/dev/null | sed -n 's/.*Sequence: \([0-9]*\).*/\1/p')
-echo "🔢 Current sequence: $SEQUENCE"
 if [[ -z "$SEQUENCE" ]]; then
   SEQUENCE=1
 else
