@@ -58,6 +58,18 @@ INSTALLED_INFO=$(peer lifecycle chaincode queryinstalled)
 PACKAGE_ID=$(echo "$INSTALLED_INFO" | grep "$LABEL" | awk -F 'Package ID: |, Label:' '{print $2}')
 echo "📦 Package ID: $PACKAGE_ID"
 
+
+# Step 5: Get current sequence (try from Org1)
+echo "🔍 Getting current sequence..."
+SEQUENCE=$(peer lifecycle chaincode querycommitted -C "$CHANNEL_NAME" -n "$CC_NAME" 2>/dev/null | grep Sequence | awk '{print $2}')
+if [[ -z "$SEQUENCE" ]]; then
+  SEQUENCE=1
+else
+  SEQUENCE=$((SEQUENCE + 1))
+fi
+echo "🔢 Using sequence: $SEQUENCE"
+
+
 # Step 4: Approve chaincode definition for Org1
 peer lifecycle chaincode approveformyorg \
   -o localhost:7050 \
@@ -66,7 +78,7 @@ peer lifecycle chaincode approveformyorg \
   --name "$CC_NAME" \
   --version "$CC_VERSION" \
   --package-id "$PACKAGE_ID" \
-  --sequence 1 \
+  --sequence "$SEQUENCE" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 
@@ -88,7 +100,7 @@ peer lifecycle chaincode approveformyorg \
   --name "$CC_NAME" \
   --version "$CC_VERSION" \
   --package-id "$PACKAGE_ID" \
-  --sequence 1 \
+  --sequence "$SEQUENCE" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 
@@ -99,7 +111,7 @@ peer lifecycle chaincode checkcommitreadiness \
   --channelID "$CHANNEL_NAME" \
   --name "$CC_NAME" \
   --version "$CC_VERSION" \
-  --sequence 1 \
+  --sequence "$SEQUENCE" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" \
   --output json
@@ -112,7 +124,7 @@ peer lifecycle chaincode commit \
   --channelID "$CHANNEL_NAME" \
   --name "$CC_NAME" \
   --version "$CC_VERSION" \
-  --sequence 1 \
+  --sequence "$SEQUENCE" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" \
   --peerAddresses localhost:7051 \
