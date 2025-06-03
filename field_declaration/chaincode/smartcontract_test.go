@@ -1,4 +1,4 @@
-package chaincode_test
+package chaincode
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/hyperledger/fabric-chaincode-go/v2/shim"
 	"github.com/hyperledger/fabric-contract-api-go/v2/contractapi"
 	"github.com/hyperledger/fabric-protos-go-apiv2/ledger/queryresult"
-	"github.com/fernweh-3/chaincode/field_declaration/chaincode"
+	// "github.com/fernweh-3/chaincode/field_declaration/chaincode"
 	"github.com/fernweh-3/chaincode/field_declaration/chaincode/mocks"
 	"github.com/stretchr/testify/require"
 )
@@ -33,7 +33,7 @@ func TestInitLedger(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	err := assetTransfer.InitLedger(transactionContext)
 	require.NoError(t, err)
 
@@ -47,7 +47,7 @@ func TestCreateAsset(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	err := assetTransfer.CreateAsset(transactionContext, "", "", 0, "", 0)
 	require.NoError(t, err)
 
@@ -65,12 +65,12 @@ func TestReadAsset(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	expectedAsset := &chaincode.Asset{ID: "asset1"}
+	expectedAsset := &Asset{ID: "asset1"}
 	bytes, err := json.Marshal(expectedAsset)
 	require.NoError(t, err)
 
 	chaincodeStub.GetStateReturns(bytes, nil)
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	asset, err := assetTransfer.ReadAsset(transactionContext, "")
 	require.NoError(t, err)
 	require.Equal(t, expectedAsset, asset)
@@ -90,12 +90,12 @@ func TestUpdateAsset(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	expectedAsset := &chaincode.Asset{ID: "asset1"}
+	expectedAsset := &Asset{ID: "asset1"}
 	bytes, err := json.Marshal(expectedAsset)
 	require.NoError(t, err)
 
 	chaincodeStub.GetStateReturns(bytes, nil)
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	err = assetTransfer.UpdateAsset(transactionContext, "", "", 0, "", 0)
 	require.NoError(t, err)
 
@@ -113,13 +113,13 @@ func TestDeleteAsset(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	asset := &chaincode.Asset{ID: "asset1"}
+	asset := &Asset{ID: "asset1"}
 	bytes, err := json.Marshal(asset)
 	require.NoError(t, err)
 
 	chaincodeStub.GetStateReturns(bytes, nil)
 	chaincodeStub.DelStateReturns(nil)
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	err = assetTransfer.DeleteAsset(transactionContext, "")
 	require.NoError(t, err)
 
@@ -137,12 +137,12 @@ func TestTransferAsset(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	asset := &chaincode.Asset{ID: "asset1"}
+	asset := &Asset{ID: "asset1"}
 	bytes, err := json.Marshal(asset)
 	require.NoError(t, err)
 
 	chaincodeStub.GetStateReturns(bytes, nil)
-	assetTransfer := chaincode.SmartContract{}
+	assetTransfer := SmartContract{}
 	_, err = assetTransfer.TransferAsset(transactionContext, "", "")
 	require.NoError(t, err)
 
@@ -152,7 +152,7 @@ func TestTransferAsset(t *testing.T) {
 }
 
 func TestGetAllAssets(t *testing.T) {
-	asset := &chaincode.Asset{ID: "asset1"}
+	asset := &Asset{ID: "asset1"}
 	bytes, err := json.Marshal(asset)
 	require.NoError(t, err)
 
@@ -166,10 +166,10 @@ func TestGetAllAssets(t *testing.T) {
 	transactionContext.GetStubReturns(chaincodeStub)
 
 	chaincodeStub.GetStateByRangeReturns(iterator, nil)
-	assetTransfer := &chaincode.SmartContract{}
+	assetTransfer := &SmartContract{}
 	assets, err := assetTransfer.GetAllAssets(transactionContext)
 	require.NoError(t, err)
-	require.Equal(t, []*chaincode.Asset{asset}, assets)
+	require.Equal(t, []*Asset{asset}, assets)
 
 	iterator.HasNextReturns(true)
 	iterator.NextReturns(nil, fmt.Errorf("failed retrieving next item"))
@@ -190,7 +190,7 @@ func TestLastAssetID_FieldDeclarationIssue(t *testing.T) {
 	transactionContext := &mocks.TransactionContext{}
 	transactionContext.GetStubReturns(chaincodeStub)
 
-	sc := &chaincode.SmartContract{}
+	sc := &SmartContract{}
 
 	// mock createAsset to set lastAssetID
 	chaincodeStub.GetStateReturns(nil, nil)
@@ -201,6 +201,6 @@ func TestLastAssetID_FieldDeclarationIssue(t *testing.T) {
 	require.Equal(t, "assetX", sc.lastAssetID)
 
 	// mock another peer(a new instance of SmartContract) to ensure it does not share lastAssetID
-	sc2 := &chaincode.SmartContract{}
+	sc2 := &SmartContract{}
 	require.NotEqual(t, "assetX", sc2.lastAssetID) // should be "", proving it's not shared
 }
