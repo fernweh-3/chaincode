@@ -1,4 +1,0 @@
-# Ignore all files from building the chaincode
-assetTransfer
-*.out
-.gitignore
