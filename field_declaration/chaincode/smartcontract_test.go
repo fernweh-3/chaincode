@@ -60,6 +60,28 @@ func TestCreateAsset(t *testing.T) {
 	require.EqualError(t, err, "failed to read from world state: unable to retrieve asset")
 }
 
+
+// TestQueryLastAssetID tests that QueryLastAssetID returns the current value of lastAssetID.
+func TestQueryLastAssetID(t *testing.T) {
+	chaincodeStub := &mocks.ChaincodeStub{}
+	transactionContext := &mocks.TransactionContext{}
+	transactionContext.GetStubReturns(chaincodeStub)
+
+	// Query the lastAssetID and verify the returned value matches what was set.
+	sc := &SmartContract{}
+	sc.lastAssetID = "assetY"
+	result, err := sc.QueryLastAssetID(transactionContext)
+	require.NoError(t, err)
+	require.Equal(t, "assetY", result)
+
+	// Query the lastAssetID and verify the returned value is the default (empty string).
+	sc2 := &SmartContract{}
+	result2, err := sc2.QueryLastAssetID(transactionContext)
+	require.NoError(t, err)
+	require.Equal(t, "", result2)
+}
+
+
 func TestReadAsset(t *testing.T) {
 	chaincodeStub := &mocks.ChaincodeStub{}
 	transactionContext := &mocks.TransactionContext{}

@@ -50,6 +50,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
+
 // CreateAsset issues a new asset to the world state with given details.
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, id string, color string, size int, owner string, appraisedValue int) error {
 	exists, err := s.AssetExists(ctx, id)
@@ -78,6 +79,11 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	}
 
 	return ctx.GetStub().PutState(id, assetJSON)
+}
+
+// QueryLastAssetID returns the last asset ID that was created in memory.
+func (s *SmartContract) QueryLastAssetID(ctx contractapi.TransactionContextInterface) (string, error) {
+    return s.lastAssetID, nil
 }
 
 // ReadAsset returns the asset stored in the world state with given id.
