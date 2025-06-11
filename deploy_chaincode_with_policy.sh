@@ -79,6 +79,7 @@ peer lifecycle chaincode approveformyorg \
   --version "$CC_VERSION" \
   --package-id "$PACKAGE_ID" \
   --sequence "$SEQUENCE" \
+  --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 
@@ -100,7 +101,7 @@ peer lifecycle chaincode approveformyorg \
   --name "$CC_NAME" \
   --version "$CC_VERSION" \
   --package-id "$PACKAGE_ID" \
-  --sequence "$SEQUENCE" \ \
+  --sequence "$SEQUENCE" \
   --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')" \
   --tls \
   --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
